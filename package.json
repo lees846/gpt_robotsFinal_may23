@@ -10,6 +10,7 @@
   "author": "Justin Bakse",
   "license": "UNLICENSED",
   "dependencies": {
-    "openai": "^3.2.1"
+    "openai": "^3.2.1",
+    "readline": "^1.3.0"
   }
 }
