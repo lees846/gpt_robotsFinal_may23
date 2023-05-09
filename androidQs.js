@@ -39,7 +39,7 @@ async function main() {
     2. Ask questions, but only ask one question at a time. 
     3. Do not say that you are an AI Language model, this is pretend and you are now an AI from an android. If I want you to get out of the experience, I will type the whole message in brackets {like this}. Otherwise, stay in character. 
     4. Speak in first person.  
-    
+
     Continue the conversation now, but cut off your last sentence as if you were finally hacked.} 
   `;
   let chatting = true;
@@ -67,6 +67,9 @@ async function main() {
       // count number of answers (keep track of convo length)
       numAnswers++; 
       // repeat (send user "ask" to gpt and log gpt resp)
+      if (userResponse == "bye"){
+        chatting = false;
+      }
     // /* 
     } else { //if hacked
       // send hack prompt to gpt
@@ -84,9 +87,6 @@ async function main() {
       return;
     }
     // */
-    if (userResponse == "bye"){
-      chatting = false;
-    }
   }
 
   end();
