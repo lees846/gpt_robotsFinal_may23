@@ -81,9 +81,7 @@ async function main() {
 }
 
 function setConvoLength() {
-  let convoLength = Math.floor(Math.random()*25);
-  if (convoLength < 10) {
-    convoLength = 10;
-  }
+  let convoLength = Math.floor(Math.random()*15);
+  convoLength += 10; // makes convoLength between 10 and 25 responses
   return convoLength;
 }
