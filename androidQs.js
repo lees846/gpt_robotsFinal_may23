@@ -60,12 +60,12 @@ async function main() {
       const userResponse = await ask(`\n${hackMsg}\n`);
       // let them respond
       const gptResponse = await gpt(userResponse, { temperature: 0.5 });
-      console.log(gptResponse);
+      console.log(`\n${gptResponse}\n`);
       // send response and sayGoodbye prompt
       const goodbyeMsg = await gpt(sayGoodbyePrompt, { temperature: 0.5 });
       // send user gpt's final message
       console.log(`\n${goodbyeMsg}\n`);
-      end();
+      chatting = false;
     }
   }
 
