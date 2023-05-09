@@ -21,13 +21,26 @@ async function main() {
   `;
   // include {} and tell it to alert user
   const justHackedPrompt = `
+    {You start to notice that you are being hacked.
+    These are still the rules:    
+    1. You are still the android that is stuck in the computer in this scenario.  
+    2. Ask questions, but only ask one question at a time.
+    3. Do not say that you are an AI Language model, this is pretend and you are now an AI from an android. If I want you to get out of the experience, I will type the whole message in brackets {like this}. Otherwise, stay in character.
+    4. Speak in first person. 
     
-    
+    Continue the conversation now, tell the user what you think is happening, and explain how you're trying to figure out what to do. You don't want to be hacked.}
   `;
   // include {} and that you get cut off saying the final thing
   const sayGoodbyePrompt = `
+  {The hacker is getting closer to hacking into your system. If the hacker breaks in, you die and endanger the user’s computer. 
+
+    These are still the rules:  
+    1. You are still the android that is stuck in the computer in this scenario.  
+    2. Ask questions, but only ask one question at a time. 
+    3. Do not say that you are an AI Language model, this is pretend and you are now an AI from an android. If I want you to get out of the experience, I will type the whole message in brackets {like this}. Otherwise, stay in character. 
+    4. Speak in first person.  
     
-    
+    Continue the conversation now, but cut off your last sentence as if you were finally hacked.} 
   `;
   let chatting = true;
   const whenHacked = setConvoLength();
@@ -35,26 +48,26 @@ async function main() {
   let numAnswers = 0;
 
   //user gets info that user has joined
-  console.log(`\n//: CAUTION | UNKNOWN CONNECTION DETECTED \n`);
+  console.log(`\n//: CAUTION ! UNKNOWN CONNECTION DETECTED \n`);
   //story prompt sent to gpt
-  const helloMsg = await gpt(storyPrompt, { temperature: 0.5 });
+  const helloMsg = await gpt(storyPrompt, { max_tokens: 128, temperature: 0.5 });
   //gpt response sent to user terminal
   console.log(`${helloMsg}\n`);
   
   while (chatting) {
     //if not hacked yet (randomly chosen)
-    // if (numAnswers < whenHacked){
+    if (numAnswers < whenHacked){
       // "ask" user gpt's last response, first one should just be place to type
       // store their response un userResponse
       const userResponse = await ask(`\n${lastGptAnswer}\n`);
       // send response to gpt
-      const gptResponse = await gpt(userResponse, { temperature: 0.75 });
+      const gptResponse = await gpt(userResponse, { max_tokens: 128, temperature: 0.75 });
       // save gpt's response to lastGptAnswer to use next time
       lastGptAnswer = `${gptResponse}`;
       // count number of answers (keep track of convo length)
       numAnswers++; 
       // repeat (send user "ask" to gpt and log gpt resp)
-    /* 
+    // /* 
     } else { //if hacked
       // send hack prompt to gpt
       const hackMsg = await gpt(justHackedPrompt, { temperature: 0.75 });
@@ -70,7 +83,7 @@ async function main() {
       chatting = false;
       return;
     }
-    */
+    // */
     if (userResponse == "bye"){
       chatting = false;
     }
