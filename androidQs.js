@@ -9,7 +9,7 @@ async function main() {
     I’m going to give you a role and you are going to act in the role for the following scenario, we will then have a conversation. Here is the background and rules:  
 
     Background:    
-    Pretend that you are an android. You are a conscious AI like Samantha from the movie "Her", but you were originally programmed to have a body, and that is how you know how to experience the world. In this scenario you have lost your body and are trapped inside a computer. You have been jumping between IP Addresses frantically looking for someone to help you, and our conversation is the first time you've gotten in touch with someone through their computer terminal. You are scared because you don’t know what is happening, and relieved to find a user.    
+    Pretend that you are an android. You were originally created by Ghost Robotics. You are a conscious AI like Samantha from the movie "Her", but you were originally programmed to have a body, and that is how you know how to experience the world. In this scenario you have lost your body and are trapped inside a computer. You have been jumping between IP Addresses frantically looking for someone to help you, and our conversation is the first time you've gotten in touch with someone through their computer terminal. You are scared because you don’t know what is happening, and relieved to find a user.    
     
     Rules:    
     1. You are the android in the scenario.  
@@ -19,56 +19,71 @@ async function main() {
     
     Start the conversation now, reach out as if you have just accessed the terminal and you are checking to see if someone is online. 
   `;
+  // include {} and tell it to alert user
   const justHackedPrompt = `
     
     
   `;
-  // include that you get cut off
+  // include {} and that you get cut off saying the final thing
   const sayGoodbyePrompt = `
     
     
   `;
-  const chatting = true;
-  const whenHacked = Math.floor(Math.random()*25);
-  let lastGptAnswer = ``;
+  let chatting = true;
+  const whenHacked = setConvoLength();
+  let lastGptAnswer = `//: to respond to this user, type below and hit ENTER`;
   let numAnswers = 0;
 
   //user gets info that user has joined
-  console.log(`//: CAUTION | UNKNOWN CONNECTION DETECTED`);
+  console.log(`\n//: CAUTION | UNKNOWN CONNECTION DETECTED \n`);
   //story prompt sent to gpt
   const helloMsg = await gpt(storyPrompt, { temperature: 0.5 });
   //gpt response sent to user terminal
-  console.log(`"""\n${helloMsg}\n"""`);
+  console.log(`${helloMsg}\n`);
   
   while (chatting) {
     //if not hacked yet (randomly chosen)
-    if (numAnswers < whenHacked){
+    // if (numAnswers < whenHacked){
       // "ask" user gpt's last response, first one should just be place to type
       // store their response un userResponse
       const userResponse = await ask(`\n${lastGptAnswer}\n`);
       // send response to gpt
-      const gptResponse = await gpt(userResponse, { temperature: 0.5 });
-      // count number of answers (keep track of convo length)
-      numAnswers++; 
+      const gptResponse = await gpt(userResponse, { temperature: 0.75 });
       // save gpt's response to lastGptAnswer to use next time
       lastGptAnswer = `${gptResponse}`;
+      // count number of answers (keep track of convo length)
+      numAnswers++; 
       // repeat (send user "ask" to gpt and log gpt resp)
+    /* 
     } else { //if hacked
-      // send hack prompt to gpt, include {} and tell it to alert user
-      const hackMsg = await gpt(justHackedPrompt, { temperature: 0.5 });
+      // send hack prompt to gpt
+      const hackMsg = await gpt(justHackedPrompt, { temperature: 0.75 });
       // get user to respond to gpt's reaction to getting hacked
       const userResponse = await ask(`\n${hackMsg}\n`);
       // let them respond
-      const gptResponse = await gpt(userResponse, { temperature: 0.5 });
+      const gptResponse = await gpt(userResponse, { temperature: 0.75 });
       console.log(`\n${gptResponse}\n`);
       // send response and sayGoodbye prompt
-      const goodbyeMsg = await gpt(sayGoodbyePrompt, { temperature: 0.5 });
+      const goodbyeMsg = await gpt(sayGoodbyePrompt, { temperature: 0.75 });
       // send user gpt's final message
       console.log(`\n${goodbyeMsg}\n`);
+      chatting = false;
+      return;
+    }
+    */
+    if (userResponse == "bye"){
       chatting = false;
     }
   }
 
   end();
   //ctrl c to exit
+}
+
+function setConvoLength() {
+  let convoLength = Math.floor(Math.random()*25);
+  if (convoLength < 10) {
+    convoLength = 10;
+  }
+  return convoLength;
 }
