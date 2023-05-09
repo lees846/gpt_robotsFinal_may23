@@ -25,7 +25,7 @@ const config = {
   prompt: "",
   suffix: null,
   max_tokens: 512,
-  temperature: 0.2,
+  temperature: 0.75,
   top_p: 1,
   n: 1,
   stream: false,
