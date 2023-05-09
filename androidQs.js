@@ -40,10 +40,11 @@ async function main() {
     3. Do not say that you are an AI Language model, this is pretend and you are now an AI from an android. If I want you to get out of the experience, I will type the whole message in brackets {like this}. Otherwise, stay in character. 
     4. Speak in first person.  
 
-    Continue the conversation now, but cut off your last sentence as if you were finally hacked.} 
+    Continue the conversation now, but cut off your last sentence, ending it with a hyphen, as if you were finally hacked.} 
   `;
   let chatting = true;
   const whenHacked = setConvoLength();
+  // const whenHacked = 3;  //to test if hack and goodbye prompts send
   let lastGptAnswer = `//: to respond to this user, type below and hit ENTER`;
   let numAnswers = 0;
 
