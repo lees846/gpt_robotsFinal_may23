@@ -23,54 +23,51 @@ async function main() {
     
     
   `;
+  // include that you get cut off
   const sayGoodbyePrompt = `
     
     
   `;
-  // const chatting = true;
-  let lastAnswer = "";
+  const chatting = true;
+  const whenHacked = Math.floor(Math.random()*25);
+  let lastGptAnswer = ``;
   let numAnswers = 0;
-  let whenHacked = Math.floor(Math.random()*25);
-  console.log(`//: CAUTION | UNKNOWN CONNECTION DETECTED`);
-  const helloMsg = await gpt(storyPrompt, { temperature: 0.5 });
-  console.log(`"""\n${helloMsg}\n"""`);
 
   //user gets info that user has joined
+  console.log(`//: CAUTION | UNKNOWN CONNECTION DETECTED`);
   //story prompt sent to gpt
+  const helloMsg = await gpt(storyPrompt, { temperature: 0.5 });
   //gpt response sent to user terminal
-  //if not hacked yet,
-    // let user respond
-    // "ask" user the last response from gpt
-    // store their response
-    // send response to gpt
-    // count number of answers (keep track of convo length)
-    // repeat (send user "ask" to gpt and log gpt resp)
-  //if hacked
-    // send hack prompt to gpt, include {} and tell it to alert user
-    // log something to user
-    // let them respond
-    // send response and sayGoodbye prompt
-    // end();
-
-  if (numAnswers < whenHacked){
-    let response = await ask(`${lastAnswer}\n`);
-    numAnswers++;
-    lastAnswer = ``;
-  } else {
-    // submit hacked prompt in brackets
-  }
-
-  // const prompt = await ask();
-  // const result = await gpt(prompt + " is your name", { temperature: 0.3 });
-  //console.log(`"""\n${result}\n"""`);
-
-
-  //const result3 = await gpt(prompt3, { temperature: 0.3 });
+  console.log(`"""\n${helloMsg}\n"""`);
   
-  const finalResult = await gpt(queryForGPT, { temperature: 0.3 });
-  console.log(`"""\n${finalResult}\n"""`);
-
-  //  const prompt = `My name is ${name} and I am from ${town}. Create a limerick about me.`;
+  while (chatting) {
+    //if not hacked yet (randomly chosen)
+    if (numAnswers < whenHacked){
+      // "ask" user gpt's last response, first one should just be place to type
+      // store their response un userResponse
+      const userResponse = await ask(`\n${lastGptAnswer}\n`);
+      // send response to gpt
+      const gptResponse = await gpt(userResponse, { temperature: 0.5 });
+      // count number of answers (keep track of convo length)
+      numAnswers++; 
+      // save gpt's response to lastGptAnswer to use next time
+      lastGptAnswer = `${gptResponse}`;
+      // repeat (send user "ask" to gpt and log gpt resp)
+    } else { //if hacked
+      // send hack prompt to gpt, include {} and tell it to alert user
+      const hackMsg = await gpt(justHackedPrompt, { temperature: 0.5 });
+      // get user to respond to gpt's reaction to getting hacked
+      const userResponse = await ask(`\n${hackMsg}\n`);
+      // let them respond
+      const gptResponse = await gpt(userResponse, { temperature: 0.5 });
+      console.log(gptResponse);
+      // send response and sayGoodbye prompt
+      const goodbyeMsg = await gpt(sayGoodbyePrompt, { temperature: 0.5 });
+      // send user gpt's final message
+      console.log(`\n${goodbyeMsg}\n`);
+      end();
+    }
+  }
 
   end();
   //ctrl c to exit
